@@ -40,26 +40,73 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const usersCollection = client.db('recyclelib').collection('users');
+        const booksCollection = client.db('recyclelib').collection('allbooks');
+        const categoriesCollection = client.db('recyclelib').collection('categories');
+        const modalInfoCollection = client.db('recyclelib').collection('modalinfo');
         app.post('/users', async (req, res) => {
             const user = req.body;
-            console.log(user);
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
-        app.get('/users', async(req, res)=>{
+        app.get('/users', async (req, res) => {
             const query = {};
             const result = await usersCollection.find(query).toArray();
             res.send(result);
         })
 
-        app.get('/users/:email', async(req, res)=>{
+        app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {email: email};
+            const query = { email: email };
             const result = await usersCollection.findOne(query);
             res.send(result);
         })
-        
-        
+
+        app.get('/users/allbuyers/:role', async (req, res) => {
+            const role = req.params.role;
+            const query = {role: role};
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
+
+        // books section
+        app.post('/allbooks', async (req, res) => {
+            const book = req.body;
+            const result = await booksCollection.insertOne(book);
+            res.send(result);
+        });
+        app.get('/allbooks/category/:categoryid', async (req, res) => {
+            const categoryid = req.params.categoryid;
+            const query = {bookCategory: categoryid};
+            const result = await booksCollection.find(query).toArray();
+            res.send(result);
+        });
+
+        app.get('/allbooks/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await booksCollection.find(query).toArray();
+            res.send(result);
+        });
+
+
+        app.get('/categories', async (req, res) => {
+            // const email = req.params.email;
+            const query = {};
+            const result = await categoriesCollection.find(query).toArray();
+            res.send(result);
+        });
+
+
+        app.post('/modalinfo', async (req, res) => {
+            const info = req.body;
+            const result = await modalInfoCollection.insertOne(info);
+            res.send(result);
+        });
+
+
+
 
     }
     finally {
