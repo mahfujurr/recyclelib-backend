@@ -3,6 +3,7 @@
         "allbooks",
         "allbuyers",
         "categoryid",
-        "modalinfo"
+        "modalinfo",
+        "mybook"
     ]
 }

@@ -14,7 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.iz8azxp.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 // function verifyJWT(req, res, next) {
@@ -102,6 +101,12 @@ async function run() {
         app.post('/modalinfo', async (req, res) => {
             const info = req.body;
             const result = await modalInfoCollection.insertOne(info);
+            res.send(result);
+        });
+        app.get('/dashboard/mybook/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await modalInfoCollection.find(query).toArray();
             res.send(result);
         });
 
