@@ -43,6 +43,7 @@ async function run() {
         const categoriesCollection = client.db('recyclelib').collection('categories');
         const modalInfoCollection = client.db('recyclelib').collection('modalinfo');
         const adsCollection = client.db('recyclelib').collection('ad');
+        const reportsCollection = client.db('recyclelib').collection('report');
 
         // user management section
         app.post('/users', async (req, res) => {
@@ -56,16 +57,16 @@ async function run() {
             res.send(result);
         })
         app.get('/users/buyer', async (req, res) => {
-            const query = {role : 'buyer'};
+            const query = { role: 'buyer' };
             const result = await usersCollection.find(query).toArray();
             res.send(result);
         })
         app.get('/users/seller', async (req, res) => {
-            const query = {role : 'seller'};
+            const query = { role: 'seller' };
             const result = await usersCollection.find(query).toArray();
             res.send(result);
         })
-        
+
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -155,6 +156,25 @@ async function run() {
             const result = await adsCollection.find(query).toArray();
             res.send(result);
         });
+
+        // report section 
+        app.post('/reportedbooks', async (req, res) => {
+            const info = req.body;
+            const result = await reportsCollection.insertOne(info);
+            res.send(result);
+        });
+        app.get('/reportedbooks', async (req, res) => {
+            const query = {};
+            const result = await reportsCollection.find(query).toArray();
+            res.send(result);
+        });
+        app.delete('/reportedbooks/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: id };
+            const result = await reportsCollection.deleteOne(query);
+            res.send(result);
+        })
+
     }
     finally {
 
