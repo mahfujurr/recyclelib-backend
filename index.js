@@ -82,7 +82,20 @@ async function run() {
             res.send(result);
         });
 
-        
+        app.get('/allbooks/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await booksCollection.find(query).toArray();
+            res.send(result);
+        });
+
+
+        app.get('/categories', async (req, res) => {
+            // const email = req.params.email;
+            const query = {};
+            const result = await categoriesCollection.find(query).toArray();
+            res.send(result);
+        });
 
 
         app.post('/modalinfo', async (req, res) => {
