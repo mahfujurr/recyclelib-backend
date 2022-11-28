@@ -75,7 +75,14 @@ async function run() {
             const result = await booksCollection.insertOne(book);
             res.send(result);
         });
-       
+        app.get('/allbooks/category/:categoryid', async (req, res) => {
+            const categoryid = req.params.categoryid;
+            const query = {bookCategory: categoryid};
+            const result = await booksCollection.find(query).toArray();
+            res.send(result);
+        });
+
+        
 
 
         app.post('/modalinfo', async (req, res) => {
