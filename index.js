@@ -45,6 +45,18 @@ async function run() {
         const adsCollection = client.db('recyclelib').collection('ad');
         const reportsCollection = client.db('recyclelib').collection('report');
 
+
+
+        app.get('/jwt', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            if (user) {
+                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+                return res.send({ accessToken: token });
+            }
+            res.status(403).send({ accessToken: '' })
+        });
         // user management section
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -132,12 +144,26 @@ async function run() {
             res.send(result);
         });
 
-
+        // modal info section 
         app.post('/modalinfo', async (req, res) => {
             const info = req.body;
+            const query = {
+                bName: info.bName,
+                email: info.email
+            }
+
+            const alreadyBooked = await modalInfoCollection.find(query).toArray();
+
+            if (alreadyBooked.length) {
+                const message = `You already have a booking on ${info.bName}`
+                return res.send({ acknowledged: false, message })
+            }
+
             const result = await modalInfoCollection.insertOne(info);
             res.send(result);
         });
+
+
         app.get('/dashboard/mybook/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
