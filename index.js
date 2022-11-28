@@ -70,7 +70,12 @@ async function run() {
 
 
         // books section
-        
+        app.post('/allbooks', async (req, res) => {
+            const book = req.body;
+            const result = await booksCollection.insertOne(book);
+            res.send(result);
+        });
+       
 
 
         app.post('/modalinfo', async (req, res) => {
