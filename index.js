@@ -53,6 +53,23 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        })
+
+        app.get('/users/allbuyers/:role', async (req, res) => {
+            const role = req.params.role;
+            const query = {role: role};
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
+
+        // books section
         
 
 
